@@ -1,0 +1,94 @@
+image: docker:latest
+services:
+- docker:dind
+
+variables:
+  DOCKER_DRIVER: overlay
+  MAVEN_CLI_OPTS: "-s ci_settings.xml --batch-mode"
+  msproject: api-appointment
+  portno: 8080
+  actualmemory: 256Mi
+  requestscpu: 100m
+  requestsmemory: 406Mi
+  limitscpu: 200m
+  limitsmemory: 662Mi
+  livenessProbeinitialDelaySeconds: 89
+  readinessProbeinitialDelaySeconds: 90
+  replicasetuat: 1
+  replicasetprod: 2
+  replicasetoff: 0
+
+cache:
+  paths:
+  - target/
+  - variable
+
+stages:
+- build
+- package
+- deploy
+- shutdown
+
+build:
+  stage: build
+  image: maven:3.6.1-jdk-12
+  script:
+  - curl -sSL https://dot.net/v1/dotnet-install.sh | bash
+  - IMAGE_TAG=$CI_REGISTRY_IMAGE:$VERSION
+  - echo IMAGE_TAG="$(echo "$IMAGE_TAG")" 
+  - echo $IMAGE_TAG
+  artifacts:
+    paths:
+    - release/*
+
+
+package:
+  stage: package
+  before_script:
+  - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+  - source variable
+  - echo $IMAGE_TAG
+  - docker build . --build-arg proj="target/functional-operation-*.jar"  --build-arg HOST_FILE="deploy/hosts.txt" -t $IMAGE_TAG
+  - docker push $IMAGE_TAG
+  artifacts:
+    paths:
+    - target/
+
+deploy to staging:
+  stage: deploy
+  image: node:8.9.0
+  script:
+  - bash deploy/uat-deploy.sh
+  environment:
+    name: uat1
+    url: https://5E98EA9CAF3B139C29588A8388C35E84.sk1.eu-west-1.eks.amazonaws.com
+  only:
+    - release
+
+shutdown UAT-MS:
+  stage: shutdown
+  image: node:8.9.0
+  script: 
+    - bash deploy/deploy.sh
+  environment:       
+    name: uat1
+    url: https://5E98EA9CAF3B139C29588A8388C35E84.sk1.eu-west-1.eks.amazonaws.com
+  when: manual    
+  only:
+  - master
+  - release
+  except:
+  - tags
+
+deploy to production:
+  stage: deploy
+  image: node:8.9.0
+  script:
+  - bash deploy/prod-deploy.sh
+  environment:
+    name: prod
+    url: https://25B45A5B83EA326A2356130EBE77A00B.yl4.eu-west-1.eks.amazonaws.com
+  when: manual
+  only:
+  - tags
