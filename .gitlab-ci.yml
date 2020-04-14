@@ -28,6 +28,10 @@ services:
 before_script:
   - docker info
 
+stages:
+  - build
+  - package
+
 build:
   stage: build
   script:
