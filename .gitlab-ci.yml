@@ -61,4 +61,4 @@ deploy:
   script:
     # - helm package ./deploy --app-version=$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA --version=$CI_COMMIT_SHORT_SHA
     - helm package ./deploy --app-version=$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
-    - helm upgrade -i profile profile-"$CI_COMMIT_SHORT_SHA".tgz
+    - helm upgrade -i profile profile-"$CI_COMMIT_REF_SLUG".tgz
