@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if [ -z $1 ]
+    then 
+        echo "Image tag required. Please provide the image tag!!"
+        exit 1
+    fi
+
 docker rm -f $1
 docker rmi -f joydeep1985/#1
 docker system prune --force

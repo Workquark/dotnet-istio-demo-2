@@ -16,13 +16,14 @@ imagePullPolicy: IfNotPresent
 ## The GitLab Server URL (with protocol) that want to register the runner against
 ## ref: https://docs.gitlab.com/runner/commands/README.html#gitlab-runner-register
 ##
-gitlabUrl: http://gitlab.local.com/
+# gitlabUrl: http://gitlab.your-domain.com/
+gitlabUrl: https://gitlab.com/
 
 ## The Registration Token for adding new Runners to the GitLab Server. This must
 ## be retrieved from your GitLab Instance.
 ## ref: https://docs.gitlab.com/ce/ci/runners/README.html
 ##
-runnerRegistrationToken: "tbKHym6sLFHGaiuB3Kzs"
+runnerRegistrationToken: "TrJKSm8epxbAMYwX1GaH"
 
 ## The Runner Token for adding new Runners to the GitLab Server. This must
 ## be retrieved from your GitLab Instance. It is token of already registered runner.
@@ -78,8 +79,8 @@ checkInterval: 30
 rbac:
   create: true
   ## Define specific rbac permissions.
-  resources: ["pods", "pods/exec", "secrets"]
-  verbs: ["get", "list", "watch", "create", "patch", "delete"]
+  # resources: ["pods", "pods/exec", "secrets"]
+  # verbs: ["get", "list", "watch", "create", "patch", "delete"]
 
   ## Run the gitlab-bastion container with the ability to deploy/manage containers of jobs
   ## cluster-wide or only within namespace
@@ -87,7 +88,7 @@ rbac:
 
   ## Use the following Kubernetes Service Account name if RBAC is disabled in this Helm chart (see rbac.create)
   ##
-  # serviceAccountName: default
+serviceAccountName: gitlab-admin
 
 ## Configure integrated Prometheus metrics exporter
 ## ref: https://docs.gitlab.com/runner/monitoring/#configuration-of-the-metrics-http-server
@@ -99,7 +100,7 @@ metrics:
 runners:
   ## Default container image to use for builds when none is specified
   ##
-  image: ubuntu:16.04
+  image: docker:latest
 
   ## Specify one or more imagePullSecrets
   ##
@@ -325,9 +326,7 @@ tolerations:
 
 ## list of hosts and IPs that will be injected into the pod's hosts file
 hostAliases:
-  - ip: 192.168.1.3
-    hostnames:
-      - "gitlab.local.com"
+  []
   # Example:
   # - ip: "127.0.0.1"
   #   hostnames:
