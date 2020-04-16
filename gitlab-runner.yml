@@ -77,7 +77,7 @@ checkInterval: 30
 
 ## For RBAC support:
 rbac:
-  create: true
+  create: false
   ## Define specific rbac permissions.
   # resources: ["pods", "pods/exec", "secrets"]
   # verbs: ["get", "list", "watch", "create", "patch", "delete"]
@@ -88,7 +88,7 @@ rbac:
 
   ## Use the following Kubernetes Service Account name if RBAC is disabled in this Helm chart (see rbac.create)
   ##
-serviceAccountName: gitlab-admin
+  serviceAccountName: gitlab-runner-admin
 
 ## Configure integrated Prometheus metrics exporter
 ## ref: https://docs.gitlab.com/runner/monitoring/#configuration-of-the-metrics-http-server
@@ -247,7 +247,7 @@ runners:
 
   ## Service Account to be used for runners
   ##
-  # serviceAccountName:
+  serviceAccountName: gitlab-runner-admin
   ## If Gitlab is not reachable through $CI_SERVER_URL
   ##
   # cloneUrl:
