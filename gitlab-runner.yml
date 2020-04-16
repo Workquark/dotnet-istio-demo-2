@@ -125,7 +125,7 @@ runners:
   ##
   ## ref: https://docs.gitlab.com/ce/ci/runners/#using-tags
   ##
-  # tags: ""
+  tags: "dotnet"
 
   ## Specify if jobs without tags should be run.
   ## If not specified, Runner will default to true if no tags were specified. In other case it will
@@ -133,7 +133,7 @@ runners:
   ##
   ## ref: https://docs.gitlab.com/ce/ci/runners/#allowing-runners-with-tags-to-pick-jobs-without-tags
   ##
-  # runUntagged: true
+  runUntagged: false
 
   ## Specify whether the runner should only run protected branches.
   ## Defaults to False.

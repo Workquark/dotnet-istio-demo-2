@@ -5,7 +5,7 @@
 replicaCount: 2
 
 image:
-  repository: joydeep1985/profile
+  repository: "" # .gitlab-ci.yaml - helm upgrade -i profile profile-0.1.0.tgz --set image.repository="$CI_REGISTRY_IMAGE"
   pullPolicy: Always
 
 imagePullSecrets: [
