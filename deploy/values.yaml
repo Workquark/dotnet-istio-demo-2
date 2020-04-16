@@ -8,7 +8,9 @@ image:
   repository: joydeep1985/profile
   pullPolicy: Always
 
-imagePullSecrets: []
+imagePullSecrets: [
+  profile
+]
 nameOverride: ""
 fullnameOverride: ""
 
