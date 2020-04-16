@@ -61,4 +61,4 @@ deploy:
   script:
     # - helm package ./deploy --app-version=$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA --version=$CI_COMMIT_SHORT_SHA
     - helm package ./deploy --app-version=$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
-    - helm upgrade -i profile profile-0.1.0.tgz
+    - helm upgrade -i profile profile-0.1.0.tgz --set image.repository="$CI_REGISTRY_IMAGE"
