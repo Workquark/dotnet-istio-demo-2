@@ -34,7 +34,7 @@ stages:
   - package
 
 build:
-  image: mcr.microsoft.com/dotnet/framework/aspnet
+  image: mcr.microsoft.com/dotnet/core/sdk:3.1
   stage: build
   script:
     - dotnet publish -c release -o release
