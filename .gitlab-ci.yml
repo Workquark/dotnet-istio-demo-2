@@ -23,6 +23,11 @@ variables:
   #DOCKER_TLS_CERTDIR: "/certs"
   DOCKER_TLS_CERTDIR: ""
 
+cache:
+  paths:
+    - release/
+    - variable
+
 services:
   - docker:19.03.1-dind
 
@@ -48,11 +53,11 @@ package:
     - IMAGE_TAG=$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
     - docker build -t $IMAGE_TAG .
     - docker push $IMAGE_TAG
+    - $IMAGE_TAG > variable
 
 deploy:
   stage: deploy
   image: alpine/helm:3.1.2
-  # before_script:
-  #   - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - helm upgrade -i profile ./deploy --app-version=$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
+    - helm package ./deploy --app-version=$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA --version=$CI_COMMIT_SHORT_SHA
+    - helm upgrade -i profile ./deploy profile-$CI_COMMIT_SHORT_SHA.tgz
