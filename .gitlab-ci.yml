@@ -29,6 +29,7 @@ services:
 stages:
   - build
   - package
+  - deploy
 
 build:
   image: mcr.microsoft.com/dotnet/core/sdk:3.1
@@ -47,9 +48,11 @@ package:
     - IMAGE_TAG=$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
     - docker build -t $IMAGE_TAG .
     - docker push $IMAGE_TAG
-# package:
-#   stage: package
-#   before_script:
-#     - docker login -u joydeep1985 -p Joydeep@1985
-#   script:
-#     - docker push joydeep1985/profile-dind
+
+deploy:
+  image: alpine/helm:latest
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  stage: deploy
+  script:
+    - helm upgrade -i profile ./deploy --set app-version=$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
