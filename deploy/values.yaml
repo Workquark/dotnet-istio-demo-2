@@ -9,7 +9,7 @@ image:
   pullPolicy: Always
 
 imagePullSecrets: {
-  profile
+  name: profile
 }
   
 
