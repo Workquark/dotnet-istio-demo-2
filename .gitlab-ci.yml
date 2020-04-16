@@ -34,14 +34,22 @@ stages:
   - package
 
 build:
+  image: mcr.microsoft.com/dotnet/framework/aspnet
   stage: build
   script:
-    - docker build -t joydeep1985/profile-dind .
-    #- docker run my-docker-image /script/to/run/tests
+    - dotnet publish -c release -o release
+  artifacts:
+    paths:
+      - release/*
 
 package:
   stage: package
-  before_script:
-    - docker login -u joydeep1985 -p Joydeep@1985
   script:
-    - docker push joydeep1985/profile-dind
+    - docker build -t joydeep1985/profile-dind .
+    #- docker run my-docker-image /script/to/run/tests
+# package:
+#   stage: package
+#   before_script:
+#     - docker login -u joydeep1985 -p Joydeep@1985
+#   script:
+#     - docker push joydeep1985/profile-dind
