@@ -53,7 +53,7 @@ package:
     - IMAGE_TAG=$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
     - docker build -t $IMAGE_TAG .
     - docker push $IMAGE_TAG
-    - $IMAGE_TAG > variable
+    - echo $IMAGE_TAG > variable
 
 deploy:
   stage: deploy
