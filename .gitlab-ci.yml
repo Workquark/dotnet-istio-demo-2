@@ -65,7 +65,7 @@ deploy:
   tags:
     - dotnet
   environment:
-    name: staging
+    name: UAT
     url: https://5E98EA9CAF3B139C29588A8388C35E84.sk1.eu-west-1.eks.amazonaws.com
   script:
     # - helm package ./deploy --app-version=$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA --version=$CI_COMMIT_SHORT_SHA
