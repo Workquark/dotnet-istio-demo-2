@@ -41,6 +41,9 @@ build:
   image: mcr.microsoft.com/dotnet/core/sdk:3.1
   tags:
     - dotnet
+  environment:
+    name: UAT
+    url: https://5E98EA9CAF3B139C29588A8388C35E84.sk1.eu-west-1.eks.amazonaws.com
   script:
     - dotnet publish -c release -o release
   artifacts:
@@ -53,6 +56,9 @@ package:
     - dotnet
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  environment:
+    name: UAT
+    url: https://5E98EA9CAF3B139C29588A8388C35E84.sk1.eu-west-1.eks.amazonaws.com
   script:
     - IMAGE_TAG=$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
     - docker build -t $IMAGE_TAG .
