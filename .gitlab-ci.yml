@@ -44,6 +44,8 @@ build:
   environment:
     name: UAT
     url: https://5E98EA9CAF3B139C29588A8388C35E84.sk1.eu-west-1.eks.amazonaws.com
+    kubernetes:
+      namespace: "devops-gitlab-runner"
   script:
     - dotnet publish -c release -o release
   artifacts:
@@ -59,6 +61,8 @@ package:
   environment:
     name: UAT
     url: https://5E98EA9CAF3B139C29588A8388C35E84.sk1.eu-west-1.eks.amazonaws.com
+    kubernetes:
+      namespace: "devops-gitlab-runner"
   script:
     - IMAGE_TAG=$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
     - docker build -t $IMAGE_TAG .
@@ -73,6 +77,8 @@ deploy:
   environment:
     name: UAT
     url: https://5E98EA9CAF3B139C29588A8388C35E84.sk1.eu-west-1.eks.amazonaws.com
+    kubernetes:
+      namespace: "devops-gitlab-runner"
   script:
     # - helm package ./deploy --app-version=$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA --version=$CI_COMMIT_SHORT_SHA
     - helm package ./deploy --app-version=$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
