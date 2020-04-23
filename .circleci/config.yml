@@ -1,12 +1,28 @@
- version: 2.1
+version: 2.1
 
- orbs:
+orbs:
   win: circleci/windows@2.2.0
 
- jobs:
-   build:
-     executor: win/default     
-    
-     steps:
-       - checkout
-       - run: dotnet build
+jobs:
+  build:
+    executor: win/default
+
+    steps:
+      - checkout
+      - run: dotnet build
+
+  package:
+    docker:
+      - image: 18.09.3
+    steps:
+      # - checkout
+      # start proprietary DB using private Docker image
+      # with credentials stored in the UI
+      # - run: |
+      # echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+      # docker run -d --name db company/proprietary-db:1.2.3
+
+      # build the application image
+      - run: docker build -t company/app:$CIRCLE_BRANCH .
+      # deploy the image
+      # - run: docker push company/app:$CIRCLE_BRANCHdocker:
