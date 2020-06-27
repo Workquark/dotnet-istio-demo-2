@@ -34,5 +34,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/download-artifact@v1
+        with:
+          name: profile-artifact
       - name: Buld and push image
         uses: docker/build-push-action@v1.1.0
