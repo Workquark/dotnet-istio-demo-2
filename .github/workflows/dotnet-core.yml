@@ -37,8 +37,9 @@ jobs:
       - uses: actions/download-artifact@v1
         with:
           name: profile-artifact
-      - name: Buld and push image
-        uses: docker/build-push-action@v1.1.0
       - shell: bash
         run: |
           ls -al .
+      - name: Buld and push image
+        uses: docker/build-push-action@v1.1.0
+      
