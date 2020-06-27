@@ -1,0 +1,52 @@
+
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: profile
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - company-gateway
+  http:
+  - match:
+    # - uri:
+    #     exact: /weatherforecast
+    - uri:
+        prefix: "/profile/"
+    rewrite:
+      uri: "/"
+    route:
+    - destination:
+        host: profile.services.svc.cluster.local
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: kiali
+  namespace: istio-system
+spec:
+  hosts:
+    - kiali.dev.example.com
+  gateways:
+    - profile-gateway
+  http:
+    - route:
+        - destination:
+            host: kiali.istio-system.svc.cluster.local
+            port:
+              number: 20001
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: kiali
+  namespace: istio-system
+spec:
+  host: kiali.istio-system.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: DISABLE

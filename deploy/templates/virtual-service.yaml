@@ -1,0 +1,43 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ .Release.Name | quote }}
+  labels:
+    app.kubernetes.io/name: {{ .Release.Name | quote }}
+    app.kubernetes.io/part-of: {{ .Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+{{- if .Values.ingressGateway.enabled }}
+  gateways:
+    - {{ .Values.ingressGateway.name | quote }}
+{{- end }}    
+  hosts:
+{{- if .Values.ingressGateway.enabled }}
+    {{- range .Values.ingressGateway.hosts}}
+    - {{ . | quote }}
+    {{- end }}
+{{- else }}
+    - {{ (print .Values.service "." .Release.Namespace ".svc.cluster.local") | quote }}
+{{- end }}
+  http:
+{{- if .Values.ingressGateway.enabled }}
+    - match:
+{{- range .Values.ingressGateway.matchPrefix }}
+      - uri:
+          prefix: {{ . | quote }}
+{{- end }}
+      rewrite:
+        uri: {{ .Values.ingressGateway.rewrite.uri}}
+      route:
+      - destination:
+          host: {{ (print .Release.Name "." .Release.Namespace ".svc.cluster.local") | quote }}
+          port: 
+            number: {{ .Values.service.port }}
+          # subset: {{ (print "v" .Values.version) | quote }}
+{{- else }}
+    - route:
+      - destination:
+          host: {{ (print .Values.service "." .Release.Namespace ".svc.cluster.local") | quote }}
+          # subset: {{ (print "v" .Values.version) | quote }}
+{{- end }}
