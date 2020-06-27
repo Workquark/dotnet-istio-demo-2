@@ -1,4 +1,4 @@
-name: .NET Core
+name: Producton
 
 on:
   push:
@@ -52,5 +52,5 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           dockerfile: ./profile-artifact/Dockerfile
           repository: joydeep1985/profile
-          tags: latest
+          tags: ${{ github.ref }}
       
