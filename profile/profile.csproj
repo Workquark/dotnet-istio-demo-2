@@ -4,5 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
-
+  <ItemGroup>
+    <None Include="$(SolutionDir)\Dockerfile" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>
