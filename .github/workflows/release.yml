@@ -42,9 +42,9 @@ jobs:
       - uses: actions/download-artifact@v1
         with:
           name: profile-artifact
-      - shell: bash
-        run: |
-          ls -al .
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
       - name: Buld and push image
         uses: docker/build-push-action@v1.1.0
         with:
@@ -52,5 +52,5 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           dockerfile: ./profile-artifact/Dockerfile
           repository: joydeep1985/profile
-          tags: ${{ github.ref }}
+          tags: ${{ steps.get_version.outputs.VERSION  }}
       
