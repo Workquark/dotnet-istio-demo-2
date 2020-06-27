@@ -44,4 +44,6 @@ jobs:
         uses: docker/build-push-action@v1.1.0
         with:
           dockerfile: ./profile-artifact/Dockerfile
+          repository: joydeep1985/profile
+          tags: latest
       
